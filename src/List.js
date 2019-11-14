@@ -10,7 +10,8 @@ function List(props) {
               listId={props.list.id}
               cardIdsArr={props.list.cardIds}
               cardId={card.id}
-              key={card.id}/>
+              key={card.id}
+              />
   });
 
   return (
@@ -21,9 +22,9 @@ function List(props) {
   <div className="List-cards">
       {cardElements}
     <button 
+      onClick={() => props.handleAddRandomCard(props.list)}
       type="button" 
       className="List-add-button"
-      
       >
       + Add Random Card
     </button>

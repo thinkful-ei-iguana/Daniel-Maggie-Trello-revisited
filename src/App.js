@@ -1,7 +1,7 @@
 import React from 'react';
-import Card from './Card.js';
+// import Card from './Card.js';
 import List from './List.js';
-import {STORE} from './store.js';
+
 
 
 class App extends React.Component {
@@ -59,19 +59,57 @@ class App extends React.Component {
     const newCardIdsArr = cardIdsArr.filter(id => {
       return id !== cardId;
     })
-    const listIndex = this.state.lists.findIndex(list => {
-      return list.id === listId
-    })
 
     const newLists = this.state.lists.map(list => {
       if (list.id === listId) return Object.assign(list, {cardIds: newCardIdsArr});
       return list;
     })
-    
+  
     this.setState({
       lists: newLists
     })
   }
+
+  
+
+handleAddRandomCard = (listToAdd) => {
+    
+  const newRandomCard = () => {
+    const id = Math.random().toString(36).substring(2, 4)
+      + Math.random().toString(36).substring(2, 4);
+    return {
+      id,
+      title: `Random Card ${id}`,
+      content: 'lorem ipsum',
+    }
+  }
+  const randomCard = newRandomCard();
+  let randomCardObject = {[randomCard.id] : randomCard}
+  const allCardsPlusRandom = Object.assign(this.state.allCards, randomCardObject);
+  const cardIdsPlusRandom = [...listToAdd.cardIds, randomCard.id]
+  console.log('cardidsplusrandom is', cardIdsPlusRandom);
+  console.log('listtoadd.cardids is', listToAdd.cardIds);
+  console.log('randomcard.id', randomCard.id);
+
+
+  const newLists = this.state.lists.map(list => {
+    if (list.id === listToAdd.id) {
+      return Object.assign(listToAdd, {cardIds: cardIdsPlusRandom});
+    }
+  
+    return list;
+    
+  })
+  console.log('newLists is', newLists)
+
+
+  this.setState({
+    allCards: allCardsPlusRandom,
+    lists: newLists
+  })
+}
+  
+
   
   
   render() {
@@ -84,7 +122,9 @@ class App extends React.Component {
                 list={list}
                 cards={cards}
                 key={list.id}
-                handleDeleteCard={this.handleDeleteCard}/>
+                handleDeleteCard={this.handleDeleteCard}
+                handleAddRandomCard={this.handleAddRandomCard}  
+              />
     });
 
     return (
